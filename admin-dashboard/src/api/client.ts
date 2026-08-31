@@ -2,13 +2,13 @@ import axios from 'axios';
 
 // Dynamically determine API Base URL
 const getApiBaseUrl = () => {
-  // When running on web / Vercel, use relative path '/api/v1' for Vercel Serverless API
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    return '/api/v1';
+  let envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.trim().length > 0) {
+    return envUrl.trim().replace(/\/+$/, '');
   }
   
-  // Local fallback for local development
-  return 'http://localhost:5001/api/v1';
+  // Default to relative '/api/v1' path for Vercel reverse proxy
+  return '/api/v1';
 };
 
 export const apiClient = axios.create({
