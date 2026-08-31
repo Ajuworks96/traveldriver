@@ -60,33 +60,10 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.navigation_rounded, color: Color(0xFF2563EB), size: 20),
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              'Driver Operations Console',
-              style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-      body: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 480),
-          child: RefreshIndicator(
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 480),
+        child: RefreshIndicator(
             onRefresh: _loadDashboardData,
             color: const Color(0xFF2563EB),
             child: _isLoading
@@ -488,7 +465,6 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                     ),
                   ),
           ),
-        ),
       ),
     );
   }
