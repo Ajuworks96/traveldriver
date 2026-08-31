@@ -31,77 +31,69 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      body: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 480), // Centered Mobile App Container on Web
-          child: IndexedStack(
-            index: _currentIndex,
-            children: _screens,
-          ),
-        ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
       ),
-      bottomNavigationBar: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 480),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(
-                    index: 0,
-                    icon: Icons.grid_view_outlined,
-                    activeIcon: Icons.grid_view_rounded,
-                    label: 'Console',
-                  ),
-                  _buildNavItem(
-                    index: 1,
-                    icon: Icons.route_outlined,
-                    activeIcon: Icons.route_rounded,
-                    label: 'Trip Logs',
-                  ),
-                  // Center Quick Start Action Button
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const StartTripScreen()),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF2563EB),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x402563EB),
-                            blurRadius: 8,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(Icons.add_rounded, color: Colors.white, size: 26),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, -3),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(
+                  index: 0,
+                  icon: Icons.grid_view_outlined,
+                  activeIcon: Icons.grid_view_rounded,
+                  label: 'Console',
+                ),
+                _buildNavItem(
+                  index: 1,
+                  icon: Icons.route_outlined,
+                  activeIcon: Icons.route_rounded,
+                  label: 'Trip Logs',
+                ),
+                // Center Quick Start Floating Action Button
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const StartTripScreen()),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF2563EB),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x402563EB),
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
+                    child: const Icon(Icons.add_rounded, color: Colors.white, size: 26),
                   ),
-                  _buildNavItem(
-                    index: 2,
-                    icon: Icons.person_outline_rounded,
-                    activeIcon: Icons.person_rounded,
-                    label: 'Profile',
-                  ),
-                ],
-              ),
+                ),
+                _buildNavItem(
+                  index: 2,
+                  icon: Icons.person_outline_rounded,
+                  activeIcon: Icons.person_rounded,
+                  label: 'Profile',
+                ),
+              ],
             ),
           ),
         ),
@@ -126,7 +118,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       },
       borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
