@@ -7,9 +7,9 @@ const getApiBaseUrl = () => {
     return envUrl.trim().replace(/\/+$/, '');
   }
   
-  // When running in production browser on Vercel/Web without VITE_API_URL, default to relative route '/api/v1'
+  // When running in production browser on Vercel/Web, connect directly to live Render backend
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    return '/api/v1';
+    return 'https://traveldriver.onrender.com/api/v1';
   }
   
   // Local fallback
