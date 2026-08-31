@@ -15,7 +15,7 @@ class TravelDriverApp extends StatelessWidget {
     return MaterialApp(
       title: 'Driver Trip Management',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       home: const SplashScreen(),
     );
   }

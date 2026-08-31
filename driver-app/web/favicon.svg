@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="pinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+  </defs>
+  
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="url(#brandGradient)" filter="url(#shadow)" />
+  
+  <g fill="none" stroke="url(#pinGradient)" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="28" stroke-width="6" />
+    <circle cx="50" cy="50" r="9" fill="url(#pinGradient)" stroke-dasharray="none" />
+    <line x1="50" y1="59" x2="50" y2="78" stroke-width="5" />
+    <line x1="41" y1="50" x2="22" y2="50" stroke-width="5" />
+    <line x1="59" y1="50" x2="78" y2="50" stroke-width="5" />
+  </g>
+  
+  <path d="M 50 16 C 45 16, 41 20, 41 25 C 41 32, 50 39, 50 39 C 50 39, 59 32, 59 25 C 59 20, 55 16, 50 16 Z" fill="#F59E0B" />
+  <circle cx="50" cy="24" r="3" fill="#FFFFFF" />
+</svg>

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const Color darkBackground = Color(0xFF0F172A);
-  static const Color cardBackground = Color(0xFF1E293B);
-  static const Color primaryBlue = Color(0xFF38BDF8);
-  static const Color primaryBlueDark = Color(0xFF0284C7);
-  static const Color accentGreen = Color(0xFF10B981);
-  static const Color accentAmber = Color(0xFFF59E0B);
-  static const Color accentRed = Color(0xFFF43F5E);
-  static const Color textLight = Color(0xFFF8FAFC);
-  static const Color textMuted = Color(0xFF94A3B8);
+  // Human-touch Clean Light Slate Palette
+  static const Color lightBackground = Color(0xFFF8FAFC);
+  static const Color cardBackground = Color(0xFFFFFFFF);
+  static const Color primaryBlue = Color(0xFF2563EB);
+  static const Color primaryBlueDark = Color(0xFF1D4ED8);
+  static const Color accentGreen = Color(0xFF16A34A);
+  static const Color accentAmber = Color(0xFFD97706);
+  static const Color accentRed = Color(0xFFDC2626);
+  static const Color textDark = Color(0xFF0F172A);
+  static const Color textMuted = Color(0xFF64748B);
+  static const Color borderColor = Color(0xFFE2E8F0);
 
-  static ThemeData get darkTheme {
+  static ThemeData get lightTheme {
     return ThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: darkBackground,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: lightBackground,
       primaryColor: primaryBlue,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: const ColorScheme.light(
         primary: primaryBlue,
         secondary: accentGreen,
         surface: cardBackground,
@@ -24,18 +26,19 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         color: cardBackground,
-        elevation: 2,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Color(0xFF334155), width: 1),
+          side: const BorderSide(color: borderColor, width: 1),
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF090D16),
-        elevation: 0,
+        backgroundColor: Color(0xFFFFFFFF),
+        elevation: 0.5,
         centerTitle: true,
+        iconTheme: IconThemeData(color: textDark),
         titleTextStyle: TextStyle(
-          color: textLight,
+          color: textDark,
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
@@ -43,8 +46,9 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryBlue,
-          foregroundColor: darkBackground,
-          minimumSize: const Size.fromHeight(54),
+          foregroundColor: Colors.white,
+          minimumSize: const Size.fromHeight(52),
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -56,22 +60,22 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF0F172A),
+        fillColor: const Color(0xFFFFFFFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF334155)),
+          borderSide: const BorderSide(color: borderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF334155)),
+          borderSide: const BorderSide(color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: primaryBlue, width: 2),
         ),
         labelStyle: const TextStyle(color: textMuted),
-        hintStyle: const TextStyle(color: Color(0xFF64748B)),
+        hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
       ),
     );
   }

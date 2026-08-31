@@ -63,13 +63,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E293B),
+                    color: const Color(0xFFEFF6FF),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Icon(
-                    Icons.drive_eta_rounded,
-                    size: 56,
-                    color: Color(0xFF38BDF8),
+                    Icons.navigation_rounded,
+                    size: 48,
+                    color: Color(0xFF2563EB),
                   ),
                 ),
               ),
@@ -80,16 +80,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFFF8FAFC),
+                  color: Color(0xFF0F172A),
                 ),
               ),
               const SizedBox(height: 8),
               const Text(
-                'Enter your agency credentials to access your trips',
+                'Enter your registered driver account credentials',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF94A3B8),
+                  color: Color(0xFF64748B),
                 ),
               ),
               const SizedBox(height: 32),
