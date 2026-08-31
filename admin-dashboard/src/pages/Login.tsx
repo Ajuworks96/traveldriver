@@ -150,13 +150,12 @@ export const Login: React.FC = () => {
 
           <div className="form-group" style={{ marginBottom: '24px' }}>
             <label className="form-label">Password</label>
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <div style={{ position: 'relative', width: '100%' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-input"
-                style={{ paddingRight: '42px', width: '100%' }}
+                className="form-input form-input-password"
                 placeholder="••••••••"
                 required
               />
@@ -166,6 +165,8 @@ export const Login: React.FC = () => {
                 style={{
                   position: 'absolute',
                   right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
                   background: 'none',
                   border: 'none',
                   color: '#64748B',
@@ -174,6 +175,7 @@ export const Login: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  zIndex: 5,
                 }}
                 title={showPassword ? 'Hide password' : 'Show password'}
               >
