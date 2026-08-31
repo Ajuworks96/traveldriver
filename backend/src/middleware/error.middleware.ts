@@ -59,6 +59,7 @@ export const errorHandler = (
 
   res.status(500).json({
     success: false,
-    message: err.message || 'Internal server error',
+    message: (err && err.message) ? err.message : String(err),
+    error: err.name || 'ServerError',
   });
 };
