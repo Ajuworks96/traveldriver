@@ -19,6 +19,7 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
   User? _currentUser;
   Trip? _activeTrip;
   List<Trip> _recentTrips = [];
+  List<Trip> _allTrips = [];
   bool _isLoading = true;
 
   @override
@@ -34,16 +35,27 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
 
     final user = await AuthStorage.getUser();
     final activeTrip = await ApiService.getActiveTrip();
-    final history = await ApiService.getTripHistory(status: 'COMPLETED');
+    final history = await ApiService.getTripHistory();
 
     if (!mounted) return;
+
+    final completedTrips = history.where((t) => t.status == 'COMPLETED').toList();
 
     setState(() {
       _currentUser = user;
       _activeTrip = activeTrip;
-      _recentTrips = history.take(4).toList();
+      _allTrips = history;
+      _recentTrips = completedTrips.take(4).toList();
       _isLoading = false;
     });
+  }
+
+  double get _totalKmDriven {
+    return _allTrips.fold(0.0, (sum, t) => sum + (t.totalKm ?? 0.0));
+  }
+
+  double get _totalCashCollected {
+    return _allTrips.fold(0.0, (sum, t) => sum + (t.cashAmount ?? 0.0));
   }
 
   @override
@@ -53,9 +65,22 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.5,
-        title: const Text(
-          'Driver Console',
-          style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 18),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFF6FF),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.navigation_rounded, color: Color(0xFF2563EB), size: 20),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Driver Operations Console',
+              style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -70,7 +95,7 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
       ),
       body: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 480), // Centered Mobile Container on Web
+          constraints: const BoxConstraints(maxWidth: 480),
           child: RefreshIndicator(
             onRefresh: _loadDashboardData,
             color: const Color(0xFF2563EB),
@@ -82,7 +107,7 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Driver Welcome Hero Header Card
+                        // Driver Welcome Hero Card with Active Badge
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -91,53 +116,130 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(18),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
+                                color: Colors.black.withOpacity(0.08),
                                 blurRadius: 16,
                                 offset: const Offset(0, 4),
                               ),
                             ],
                           ),
-                          child: Row(
+                          child: Column(
                             children: [
-                              CircleAvatar(
-                                radius: 26,
-                                backgroundColor: const Color(0xFF2563EB),
-                                child: Text(
-                                  _currentUser?.name.substring(0, 1).toUpperCase() ?? 'D',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Hello, ${_currentUser?.name ?? "Driver"}',
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 26,
+                                    backgroundColor: const Color(0xFF2563EB),
+                                    child: Text(
+                                      _currentUser?.name.substring(0, 1).toUpperCase() ?? 'D',
                                       style: const TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      _currentUser?.email ?? 'driver@travelagency.com',
-                                      style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+                                  ),
+                                  const SizedBox(width: 14),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _currentUser?.name ?? "Driver Partner",
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          _currentUser?.email ?? 'driver@travelagency.com',
+                                          style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF15803D).withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: const Color(0xFF22C55E)),
+                                    ),
+                                    child: Row(
+                                      children: const [
+                                        Icon(Icons.circle, size: 6, color: Color(0xFF22C55E)),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          'ACTIVE',
+                                          style: TextStyle(
+                                            color: Color(0xFF4ADE80),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(height: 20),
+
+                        // Performance Summary Grid (2x2 KPI Cards)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildKpiCard(
+                                title: 'Total Completed',
+                                value: '${_recentTrips.length} Trips',
+                                icon: Icons.route_rounded,
+                                iconColor: const Color(0xFF2563EB),
+                                bgColor: const Color(0xFFEFF6FF),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildKpiCard(
+                                title: 'Total Distance',
+                                value: '${_totalKmDriven.toStringAsFixed(0)} KM',
+                                icon: Icons.speed_rounded,
+                                iconColor: const Color(0xFFD97706),
+                                bgColor: const Color(0xFFFFFBEB),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildKpiCard(
+                                title: 'Cash Reconciled',
+                                value: '₹${_totalCashCollected.toStringAsFixed(0)}',
+                                icon: Icons.account_balance_wallet_rounded,
+                                iconColor: const Color(0xFF16A34A),
+                                bgColor: const Color(0xFFF0FDFA),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildKpiCard(
+                                title: 'Shift Duty',
+                                value: _activeTrip != null ? 'On Trip' : 'Available',
+                                icon: _activeTrip != null ? Icons.directions_car_filled_rounded : Icons.check_circle_rounded,
+                                iconColor: _activeTrip != null ? const Color(0xFFDC2626) : const Color(0xFF16A34A),
+                                bgColor: _activeTrip != null ? const Color(0xFFFEF2F2) : const Color(0xFFF0FDF4),
+                              ),
+                            ),
+                          ],
+                        ),
+
                         const SizedBox(height: 24),
 
                         // Active Trip Status Banner or Start New Trip Card
@@ -146,8 +248,8 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(color: const Color(0xFFBBF7D0), width: 1.5),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xFF86EFAC), width: 1.5),
                               boxShadow: [
                                 BoxShadow(
                                   color: const Color(0xFF16A34A).withOpacity(0.08),
@@ -212,7 +314,7 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'Start Odometer: ${NumberFormat.decimalPattern().format(_activeTrip!.startKm)} KM',
+                                  'Start Odometer: ${_activeTrip!.startKm.toStringAsFixed(0)} KM',
                                   style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(height: 18),
@@ -237,10 +339,10 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                         ] else ...[
                           // Start Trip Action Card
                           Container(
-                            padding: const EdgeInsets.all(24),
+                            padding: const EdgeInsets.all(22),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
+                              borderRadius: BorderRadius.circular(20),
                               border: Border.all(color: const Color(0xFFE2E8F0)),
                               boxShadow: [
                                 BoxShadow(
@@ -253,33 +355,34 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                             child: Column(
                               children: [
                                 Container(
-                                  width: 56,
-                                  height: 56,
+                                  width: 52,
+                                  height: 52,
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFEFF6FF),
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  child: const Icon(Icons.navigation_rounded, size: 28, color: Color(0xFF2563EB)),
+                                  child: const Icon(Icons.add_location_alt_rounded, size: 26, color: Color(0xFF2563EB)),
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 14),
                                 const Text(
                                   'Ready for a new assignment?',
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                                 ),
                                 const SizedBox(height: 4),
                                 const Text(
-                                  'No active trip in progress right now',
-                                  style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                                  'Select a fleet vehicle & enter starting odometer to begin',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
                                 ),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 18),
                                 ElevatedButton.icon(
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(builder: (_) => const StartTripScreen()),
                                     ).then((_) => _loadDashboardData());
                                   },
-                                  icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-                                  label: const Text('Start New Trip'),
+                                  icon: const Icon(Icons.play_arrow_rounded, size: 22),
+                                  label: const Text('Start New Trip Assignment'),
                                 ),
                               ],
                             ),
@@ -288,12 +391,12 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
 
                         const SizedBox(height: 28),
 
-                        // Recent Trips Header
+                        // Recent Trips Header & List
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Recent Trip History',
+                              'Trip Audit History',
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                             ),
                             TextButton(
@@ -303,8 +406,8 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
                                 );
                               },
                               child: const Text(
-                                'View All',
-                                style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold),
+                                'View All History',
+                                style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, fontSize: 13),
                               ),
                             ),
                           ],
@@ -313,16 +416,27 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
 
                         if (_recentTrips.isEmpty)
                           Container(
-                            padding: const EdgeInsets.all(28),
-                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(color: const Color(0xFFE2E8F0)),
                             ),
-                            child: const Text(
-                              'No completed trip logs recorded yet.',
-                              style: TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w500),
+                            child: Column(
+                              children: [
+                                const Icon(Icons.description_outlined, size: 36, color: Color(0xFF94A3B8)),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  'No trip records completed yet',
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F172A), fontSize: 14),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'Completed trips will appear here with odometer distance & cash breakdown.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Color(0xFF64748B), fontSize: 12),
+                                ),
+                              ],
                             ),
                           )
                         else
@@ -388,10 +502,57 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
       ),
     );
   }
-}
 
-// Simple Helper for Formatting Numbers
-class NumberFormat {
-  static NumberFormat decimalPattern() => NumberFormat();
-  String format(num value) => value.toStringAsFixed(0);
+  Widget _buildKpiCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color iconColor,
+    required Color bgColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
