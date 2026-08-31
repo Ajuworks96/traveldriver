@@ -1,10 +1,10 @@
 {
-  "buildCommand": "cd admin-dashboard && npm install && npm run build",
+  "buildCommand": "cd backend && npm install && npm run build && cd ../admin-dashboard && npm install && npm run build",
   "outputDirectory": "admin-dashboard/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://traveldriver.onrender.com/api/$1"
+      "destination": "/api/index.js"
     },
     {
       "source": "/(.*)",
