@@ -1,9 +1,20 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
+// Dynamically determine API Base URL
+const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  
+  // When running in production browser on Vercel/Web, use relative route '/api/v1'
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return '/api/v1';
+  }
+  
+  // Local fallback
+  return 'http://localhost:5001/api/v1';
+};
 
 export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },

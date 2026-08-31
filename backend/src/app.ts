@@ -9,11 +9,11 @@ import { errorHandler } from './middleware/error.middleware.js';
 export const createApp = (): Express => {
   const app = express();
 
-  // Security and base middlewares
-  app.use(helmet());
+  // Security and base middlewares with permissive CORS for Vercel and local client web apps
+  app.use(helmet({ crossOriginResourcePolicy: false, crossOriginOpenerPolicy: false }));
   app.use(
     cors({
-      origin: ENV.CORS_ORIGIN === '*' ? '*' : ENV.CORS_ORIGIN.split(','),
+      origin: '*',
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
