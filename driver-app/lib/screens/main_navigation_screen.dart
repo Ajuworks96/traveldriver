@@ -35,20 +35,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         index: _currentIndex,
         children: _screens,
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 12,
-              offset: const Offset(0, -3),
-            ),
-          ],
-        ),
-        child: SafeArea(
+      bottomNavigationBar: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 480),
+          margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -64,7 +68,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   activeIcon: Icons.route_rounded,
                   label: 'Trip Logs',
                 ),
-                // Center Quick Start Floating Action Button
+
+                // Elevated Floating Action Button (Start Trip)
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
@@ -73,20 +78,22 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   },
                   child: Container(
                     padding: const EdgeInsets.all(12),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF2563EB),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2563EB),
                       shape: BoxShape.circle,
-                      boxShadow: [
+                      border: Border.all(color: Colors.white, width: 3),
+                      boxShadow: const [
                         BoxShadow(
-                          color: Color(0x402563EB),
-                          blurRadius: 8,
-                          offset: Offset(0, 3),
+                          color: Color(0x552563EB),
+                          blurRadius: 14,
+                          offset: Offset(0, 6),
                         ),
                       ],
                     ),
                     child: const Icon(Icons.add_rounded, color: Colors.white, size: 26),
                   ),
                 ),
+
                 _buildNavItem(
                   index: 2,
                   icon: Icons.person_outline_rounded,
@@ -108,7 +115,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     required String label,
   }) {
     final isSelected = _currentIndex == index;
-    final color = isSelected ? const Color(0xFF2563EB) : const Color(0xFF94A3B8);
 
     return InkWell(
       onTap: () {
@@ -116,26 +122,33 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           _currentIndex = index;
         });
       },
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-        child: Column(
+      borderRadius: BorderRadius.circular(16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFEFF6FF) : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               isSelected ? activeIcon : icon,
-              color: color,
+              color: isSelected ? const Color(0xFF2563EB) : const Color(0xFF94A3B8),
               size: 22,
             ),
-            const SizedBox(height: 3),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            if (isSelected) ...[
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Color(0xFF2563EB),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
