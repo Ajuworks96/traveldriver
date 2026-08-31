@@ -14,13 +14,14 @@ async function main() {
   const deletedVehicles = await prisma.vehicle.deleteMany({});
   console.log(`Cleared ${deletedVehicles.count} vehicle records.`);
 
-  // 3. Delete all drivers (keep only ADMIN & SUPER_ADMIN)
+  // 3. Delete non-seeded drivers
   const deletedDrivers = await prisma.user.deleteMany({
     where: {
       role: Role.DRIVER,
+      email: { not: 'driver1@travelagency.com' },
     },
   });
-  console.log(`Cleared ${deletedDrivers.count} driver accounts.`);
+  console.log(`Cleared ${deletedDrivers.count} extra driver accounts.`);
 
   // 4. Ensure master Super Admin account exists
   const superAdminPasswordHash = await bcrypt.hash('SuperAdmin@123456', 12);
@@ -40,8 +41,46 @@ async function main() {
     },
   });
 
+  // 5. Ensure Agency Admin account exists
+  const adminPasswordHash = await bcrypt.hash('Admin@123456', 12);
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@travelagency.com' },
+    update: {
+      passwordHash: adminPasswordHash,
+      status: UserStatus.ACTIVE,
+    },
+    create: {
+      email: 'admin@travelagency.com',
+      name: 'Travel Operations Admin',
+      phone: '+919876543210',
+      passwordHash: adminPasswordHash,
+      role: Role.ADMIN,
+      status: UserStatus.ACTIVE,
+    },
+  });
+
+  // 6. Ensure default Driver account exists for mobile app login
+  const driverPasswordHash = await bcrypt.hash('Driver@123456', 12);
+  const driver = await prisma.user.upsert({
+    where: { email: 'driver1@travelagency.com' },
+    update: {
+      passwordHash: driverPasswordHash,
+      status: UserStatus.ACTIVE,
+    },
+    create: {
+      email: 'driver1@travelagency.com',
+      name: 'Ramesh Kumar',
+      phone: '+919123456789',
+      passwordHash: driverPasswordHash,
+      role: Role.DRIVER,
+      status: UserStatus.ACTIVE,
+    },
+  });
+
   console.log(`Master Super Admin Active: ${superAdmin.email}`);
-  console.log('Database successfully reset to a clean state for live production onboarding!');
+  console.log(`Agency Admin Active: ${admin.email}`);
+  console.log(`Driver Account Active: ${driver.email}`);
+  console.log('Database credentials verified and reset for live production!');
 }
 
 main()
