@@ -1,5 +1,4 @@
 {
-  "buildCommand": "cd backend && npm install && npm run build && cd ../admin-dashboard && npm install && npm run build",
   "outputDirectory": "admin-dashboard/dist",
   "rewrites": [
     {
