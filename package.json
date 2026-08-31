@@ -1,0 +1,8 @@
+{
+  "name": "travel-driver-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd admin-dashboard && npm install && npm run build"
+  }
+}
