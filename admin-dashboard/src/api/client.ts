@@ -1,11 +1,17 @@
 import axios from 'axios';
 
+// Dynamically determine and normalize API Base URL
 const getApiBaseUrl = () => {
   let envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && envUrl.trim().length > 0) {
-    return envUrl.trim().replace(/\/+$/, '');
+    let cleanUrl = envUrl.trim().replace(/\/+$/, '');
+    if (!cleanUrl.endsWith('/api/v1') && !cleanUrl.endsWith('/api')) {
+      cleanUrl += '/api/v1';
+    }
+    return cleanUrl;
   }
   
+  // Default fallback for Vercel production and local proxying
   return '/api/v1';
 };
 

@@ -7,7 +7,7 @@ export const ENV = {
   PORT: parseInt(process.env.PORT || '5000', 10),
   DATABASE_URL:
     process.env.DATABASE_URL ||
-    'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:6543/postgres?pgbouncer=true&sslmode=require',
+    'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:5432/postgres',
   JWT_SECRET:
     process.env.JWT_SECRET ||
     process.env.JWT_ACCESS_SECRET ||
@@ -21,6 +21,6 @@ export const ENV = {
 
 export const validateEnv = (): void => {
   if (!process.env.DATABASE_URL) {
-    console.log('[INFO] Using production verified pooler DATABASE_URL for Supabase Cloud Database');
+    console.log('[INFO] Using production direct DATABASE_URL for Supabase Cloud Database');
   }
 };
