@@ -26,9 +26,10 @@ export const createApp = (): Express => {
     app.use(morgan('dev'));
   }
 
-  // Mount API routers for both /api/v1 and /api for convenience
+  // Mount API routers for /api/v1, /api, and root / for 100% path compatibility
   app.use('/api/v1', apiRoutes);
   app.use('/api', apiRoutes);
+  app.use('/', apiRoutes);
 
   // 404 Fallback
   app.use('*', (req, res) => {

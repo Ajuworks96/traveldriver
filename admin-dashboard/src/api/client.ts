@@ -2,9 +2,12 @@ import axios from 'axios';
 
 // Dynamically determine API Base URL
 const getApiBaseUrl = () => {
-  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  let envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.trim().length > 0) {
+    return envUrl.trim().replace(/\/+$/, '');
+  }
   
-  // When running in production browser on Vercel/Web, use relative route '/api/v1'
+  // When running in production browser on Vercel/Web without VITE_API_URL, default to relative route '/api/v1'
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
     return '/api/v1';
   }
