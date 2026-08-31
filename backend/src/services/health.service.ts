@@ -4,14 +4,16 @@ export class HealthService {
   static async checkHealth() {
     let dbStatus = 'disconnected';
     let dbLatencyMs = null;
+    let dbError = null;
 
     try {
       const startTime = Date.now();
       await prisma.$queryRaw`SELECT 1`;
       dbLatencyMs = Date.now() - startTime;
       dbStatus = 'connected';
-    } catch {
+    } catch (err: any) {
       dbStatus = 'error';
+      dbError = err.message || String(err);
     }
 
     return {
@@ -21,6 +23,7 @@ export class HealthService {
       database: {
         status: dbStatus,
         latencyMs: dbLatencyMs,
+        error: dbError,
       },
       uptime: process.uptime(),
     };
