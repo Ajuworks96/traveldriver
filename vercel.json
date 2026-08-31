@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "http://localhost:5001/api/$1"
+      "destination": "https://traveldriver.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
