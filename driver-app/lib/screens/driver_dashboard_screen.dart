@@ -82,16 +82,6 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle_outlined, size: 26, color: Color(0xFF2563EB)),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-              ).then((_) => _loadDashboardData());
-            },
-          ),
-        ],
       ),
       body: Center(
         child: Container(
