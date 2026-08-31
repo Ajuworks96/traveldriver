@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/storage/auth_storage.dart';
 import 'login_screen.dart';
-import 'driver_dashboard_screen.dart';
+import 'main_navigation_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (token != null && user != null && user.role == 'DRIVER') {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const DriverDashboardScreen()),
+        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } else {
       Navigator.of(context).pushReplacement(
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: const Color(0xFFF8FAFC),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,35 +46,35 @@ class _SplashScreenState extends State<SplashScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
+                color: const Color(0xFFEFF6FF),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: const Color(0xFF334155)),
+                border: Border.all(color: const Color(0xFFDBEAFE)),
               ),
               child: const Icon(
-                Icons.directions_car_rounded,
-                size: 64,
-                color: Color(0xFF38BDF8),
+                Icons.navigation_rounded,
+                size: 56,
+                color: Color(0xFF2563EB),
               ),
             ),
             const SizedBox(height: 24),
             const Text(
-              'Travel & Driver Trip System',
+              'DriveSync Mobile',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFF8FAFC),
+                color: Color(0xFF0F172A),
               ),
             ),
             const SizedBox(height: 8),
             const Text(
-              'Driver Mobile App',
+              'Driver Operations Console',
               style: TextStyle(
                 fontSize: 14,
-                color: Color(0xFF94A3B8),
+                color: Color(0xFF64748B),
               ),
             ),
             const SizedBox(height: 48),
-            const CircularProgressIndicator(color: Color(0xFF38BDF8)),
+            const CircularProgressIndicator(color: Color(0xFF2563EB)),
           ],
         ),
       ),
