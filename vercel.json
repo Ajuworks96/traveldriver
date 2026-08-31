@@ -1,5 +1,4 @@
 {
-  "buildCommand": "cd backend && npm install && npx prisma generate && cd ../admin-dashboard && npm install && npm run build",
   "outputDirectory": "admin-dashboard/dist",
   "rewrites": [
     {
