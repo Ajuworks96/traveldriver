@@ -17,7 +17,11 @@ if (ENV.NODE_ENV !== 'production') {
 }
 
 export const connectDatabase = async (): Promise<void> => {
-  await prisma.$connect();
+  try {
+    await prisma.$connect();
+  } catch (error) {
+    console.warn('[DATABASE WARNING] Initial Prisma $connect warning, lazy connection active:', error);
+  }
 };
 
 export const disconnectDatabase = async (): Promise<void> => {
