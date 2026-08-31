@@ -2,13 +2,24 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const VERIFIED_SUPABASE_URL =
-  'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:5432/postgres?sslmode=no-verify';
+const VERIFIED_SUPABASE_POOLER_URL =
+  'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:6543/postgres?pgbouncer=true';
+
+const rawDbUrl = process.env.DATABASE_URL || '';
+let resolvedDbUrl = VERIFIED_SUPABASE_POOLER_URL;
+
+if (rawDbUrl.includes('Velvetbyte')) {
+  // If Render env var has port 5432, replace with pooler port 6543 for IPv4 compatibility
+  resolvedDbUrl = rawDbUrl.replace(':5432', ':6543');
+  if (!resolvedDbUrl.includes('pgbouncer=true')) {
+    resolvedDbUrl += (resolvedDbUrl.includes('?') ? '&' : '?') + 'pgbouncer=true';
+  }
+}
 
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: parseInt(process.env.PORT || '5000', 10),
-  DATABASE_URL: VERIFIED_SUPABASE_URL,
+  DATABASE_URL: resolvedDbUrl,
   JWT_SECRET:
     process.env.JWT_SECRET ||
     process.env.JWT_ACCESS_SECRET ||
@@ -21,5 +32,5 @@ export const ENV = {
 };
 
 export const validateEnv = (): void => {
-  console.log('[INFO] Enforcing verified Supabase sslmode=no-verify connection string');
+  console.log('[INFO] Resolved IPv4 Supabase Pooler DATABASE_URL:', ENV.DATABASE_URL);
 };
