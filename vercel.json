@@ -1,9 +1,10 @@
 {
+  "buildCommand": "npm run build",
   "outputDirectory": "admin-dashboard/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.ts"
+      "destination": "/api/index.js"
     },
     {
       "source": "/(.*)",
