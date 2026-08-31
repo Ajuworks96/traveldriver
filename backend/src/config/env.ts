@@ -2,12 +2,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const VERIFIED_SUPABASE_URL =
+  'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:6543/postgres?pgbouncer=true&sslmode=require';
+
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: parseInt(process.env.PORT || '5000', 10),
   DATABASE_URL:
-    process.env.DATABASE_URL ||
-    'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:5432/postgres',
+    process.env.DATABASE_URL && process.env.DATABASE_URL.includes('Velvetbyte%402026')
+      ? process.env.DATABASE_URL
+      : VERIFIED_SUPABASE_URL,
   JWT_SECRET:
     process.env.JWT_SECRET ||
     process.env.JWT_ACCESS_SECRET ||
@@ -20,7 +24,5 @@ export const ENV = {
 };
 
 export const validateEnv = (): void => {
-  if (!process.env.DATABASE_URL) {
-    console.log('[INFO] Using production direct DATABASE_URL for Supabase Cloud Database');
-  }
+  console.log('[INFO] Enforcing verified Supabase Cloud Database connection string');
 };
