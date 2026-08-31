@@ -6,8 +6,7 @@ import {
   Users, 
   Car, 
   ShieldCheck,
-  LogOut,
-  Navigation
+  LogOut
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useBranding } from '../../context/BrandingContext';
@@ -45,20 +44,16 @@ export const Sidebar: React.FC = () => {
         gap: '10px',
         borderBottom: '1px solid #F1F5F9',
       }}>
-        <div style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '8px',
-          backgroundColor: branding.primaryColor || '#2563EB',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#FFFFFF',
-          fontWeight: 800,
-          fontSize: '1rem',
-        }}>
-          <Navigation size={20} />
-        </div>
+        <img
+          src="/logo.svg"
+          alt="Brand Logo"
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '8px',
+            objectFit: 'contain',
+          }}
+        />
         <div style={{ flex: 1, minWidth: 0 }}>
           <h1 style={{ 
             fontSize: '0.9375rem', 
