@@ -55,17 +55,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw new Error('Access denied: Admin privileges required.');
     }
 
-    setToken(accessToken);
-    setUser(userData);
+    // Save to localStorage FIRST so Axios interceptors and useEffect have access to token immediately
     localStorage.setItem('admin_token', accessToken);
     localStorage.setItem('admin_user', JSON.stringify(userData));
+
+    setToken(accessToken);
+    setUser(userData);
   };
 
   const logout = () => {
-    setToken(null);
-    setUser(null);
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_user');
+    setToken(null);
+    setUser(null);
   };
 
   return (
