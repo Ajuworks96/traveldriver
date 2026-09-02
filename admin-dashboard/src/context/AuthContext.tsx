@@ -28,7 +28,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (token) {
         try {
           const res = await apiClient.get('/auth/me');
-          if (res.data.success && res.data.data.role === 'ADMIN') {
+          if (
+            res.data.success &&
+            (res.data.data.role === 'ADMIN' || res.data.data.role === 'SUPER_ADMIN')
+          ) {
             setUser(res.data.data);
             localStorage.setItem('admin_user', JSON.stringify(res.data.data));
           } else {
@@ -48,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const response = await apiClient.post('/auth/login', { email, password });
     const { accessToken, user: userData } = response.data.data;
 
-    if (userData.role !== 'ADMIN') {
+    if (userData.role !== 'ADMIN' && userData.role !== 'SUPER_ADMIN') {
       throw new Error('Access denied: Admin privileges required.');
     }
 
@@ -70,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         token,
-        isAuthenticated: !!token && user?.role === 'ADMIN',
+        isAuthenticated: !!token && (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'),
         isLoading,
         login,
         logout,

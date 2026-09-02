@@ -25,7 +25,7 @@ export const Login: React.FC = () => {
       setError(null);
       await login(cleanEmail, cleanPassword);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please verify credentials.');
+      setError(err.response?.data?.message || err.message || 'Login failed. Please verify credentials.');
     } finally {
       setIsLoading(false);
     }
