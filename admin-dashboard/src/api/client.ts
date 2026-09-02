@@ -2,6 +2,11 @@ import axios from 'axios';
 
 // Dynamically determine and normalize API Base URL
 const getApiBaseUrl = () => {
+  // In browser, always use relative /api/v1 to route through same-origin proxy and avoid CORS preflight blocks
+  if (typeof window !== 'undefined') {
+    return '/api/v1';
+  }
+
   let envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && envUrl.trim().length > 0) {
     let cleanUrl = envUrl.trim().replace(/\/+$/, '');
@@ -11,7 +16,6 @@ const getApiBaseUrl = () => {
     return cleanUrl;
   }
   
-  // Default fallback for Vercel production and local proxying
   return '/api/v1';
 };
 
