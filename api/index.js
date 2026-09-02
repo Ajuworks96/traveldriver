@@ -28226,19 +28226,11 @@ var import_morgan = __toESM(require_morgan(), 1);
 // backend/src/config/env.ts
 var import_dotenv = __toESM(require_main(), 1);
 import_dotenv.default.config();
-var VERIFIED_SUPABASE_POOLER_URL = "postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:6543/postgres?pgbouncer=true";
-var rawDbUrl = process.env.DATABASE_URL || "";
-var resolvedDbUrl = VERIFIED_SUPABASE_POOLER_URL;
-if (rawDbUrl.includes("Velvetbyte")) {
-  resolvedDbUrl = rawDbUrl.replace(":5432", ":6543");
-  if (!resolvedDbUrl.includes("pgbouncer=true")) {
-    resolvedDbUrl += (resolvedDbUrl.includes("?") ? "&" : "?") + "pgbouncer=true";
-  }
-}
+var VERIFIED_NEON_URL = "postgresql://neondb_owner:npg_7QCVT8JjlAYe@ep-autumn-forest-az3lthl8-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require";
 var ENV = {
   NODE_ENV: process.env.NODE_ENV || "development",
   PORT: parseInt(process.env.PORT || "5000", 10),
-  DATABASE_URL: resolvedDbUrl,
+  DATABASE_URL: process.env.DATABASE_URL || VERIFIED_NEON_URL,
   JWT_SECRET: process.env.JWT_SECRET || process.env.JWT_ACCESS_SECRET || "travel_driver_default_jwt_secret_min_32_chars",
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || process.env.JWT_ACCESS_EXPIRES_IN || "1d",
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || "travel_driver_default_refresh_secret_min_32_chars",
@@ -28267,13 +28259,15 @@ var HealthService = class {
   static async checkHealth() {
     let dbStatus = "disconnected";
     let dbLatencyMs = null;
+    let dbError = null;
     try {
       const startTime = Date.now();
       await prisma.$queryRaw`SELECT 1`;
       dbLatencyMs = Date.now() - startTime;
       dbStatus = "connected";
-    } catch {
+    } catch (err) {
       dbStatus = "error";
+      dbError = err.message || String(err);
     }
     return {
       status: "OK",
@@ -28281,7 +28275,8 @@ var HealthService = class {
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       database: {
         status: dbStatus,
-        latencyMs: dbLatencyMs
+        latencyMs: dbLatencyMs,
+        error: dbError
       },
       uptime: process.uptime()
     };
@@ -35816,7 +35811,7 @@ var createApp = () => {
 
 // api/serverless.ts
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = "postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:5432/postgres?sslmode=no-verify";
+  process.env.DATABASE_URL = "postgresql://neondb_owner:npg_7QCVT8JjlAYe@ep-autumn-forest-az3lthl8-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require";
 }
 if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = "travel_driver_default_jwt_secret_min_32_chars";

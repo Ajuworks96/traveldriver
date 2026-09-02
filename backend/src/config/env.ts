@@ -2,13 +2,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const VERIFIED_SUPABASE_URL =
-  'postgresql://postgres:Velvetbyte%402026@db.vbhoyjhsttgsvqzxchhu.supabase.co:5432/postgres?sslmode=no-verify';
+const VERIFIED_NEON_URL =
+  'postgresql://neondb_owner:npg_7QCVT8JjlAYe@ep-autumn-forest-az3lthl8-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
 
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: parseInt(process.env.PORT || '5000', 10),
-  DATABASE_URL: VERIFIED_SUPABASE_URL,
+  DATABASE_URL: process.env.DATABASE_URL || VERIFIED_NEON_URL,
   JWT_SECRET:
     process.env.JWT_SECRET ||
     process.env.JWT_ACCESS_SECRET ||
@@ -21,5 +21,5 @@ export const ENV = {
 };
 
 export const validateEnv = (): void => {
-  console.log('[INFO] Using verified direct Supabase DATABASE_URL port 5432 with sslmode=no-verify');
+  console.log('[INFO] Using verified Neon IPv4 Database connection string');
 };
