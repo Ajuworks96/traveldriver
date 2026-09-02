@@ -12,7 +12,10 @@ export const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    if (!cleanEmail || !cleanPassword) {
       setError('Please fill in both email and password');
       return;
     }
@@ -20,7 +23,7 @@ export const Login: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      await login(email, password);
+      await login(cleanEmail, cleanPassword);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please verify credentials.');
     } finally {
@@ -91,9 +94,9 @@ export const Login: React.FC = () => {
               fontSize: '0.75rem',
               fontWeight: 600,
               borderRadius: '20px',
-              border: email === 'superadmin@travelagency.com' ? '1px solid #2563EB' : '1px solid #E2E8F0',
-              backgroundColor: email === 'superadmin@travelagency.com' ? '#EFF6FF' : '#F8FAFC',
-              color: email === 'superadmin@travelagency.com' ? '#2563EB' : '#64748B',
+              border: email.trim() === 'superadmin@travelagency.com' ? '1px solid #2563EB' : '1px solid #E2E8F0',
+              backgroundColor: email.trim() === 'superadmin@travelagency.com' ? '#EFF6FF' : '#F8FAFC',
+              color: email.trim() === 'superadmin@travelagency.com' ? '#2563EB' : '#64748B',
               cursor: 'pointer',
             }}
           >
@@ -107,9 +110,9 @@ export const Login: React.FC = () => {
               fontSize: '0.75rem',
               fontWeight: 600,
               borderRadius: '20px',
-              border: email === 'admin@travelagency.com' ? '1px solid #2563EB' : '1px solid #E2E8F0',
-              backgroundColor: email === 'admin@travelagency.com' ? '#EFF6FF' : '#F8FAFC',
-              color: email === 'admin@travelagency.com' ? '#2563EB' : '#64748B',
+              border: email.trim() === 'admin@travelagency.com' ? '1px solid #2563EB' : '1px solid #E2E8F0',
+              backgroundColor: email.trim() === 'admin@travelagency.com' ? '#EFF6FF' : '#F8FAFC',
+              color: email.trim() === 'admin@travelagency.com' ? '#2563EB' : '#64748B',
               cursor: 'pointer',
             }}
           >
